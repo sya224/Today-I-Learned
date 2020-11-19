@@ -1,0 +1,54 @@
+/* Statistics */
+.charts{
+  margin-top: 10px;
+  /* display: flex; */
+}
+
+.charts > div{
+  margin-right: 20px;
+}
+
+/* .charts > div:first-child{
+  width: 40%;
+}
+
+.charts > div:last-child{
+  width: 60%;
+} */
+
+.btn_wrap > input{
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.inactive{
+  padding: 11px 16px;
+	border: 1px solid #333;
+  color: #333;
+  background-color: #fff;
+}
+
+.inactive:hover{
+  background-color: #C8C8FF;
+}
+
+.active{
+  padding: 11px 16px;
+  border: 1px solid #46649b;
+	color: #fff;
+  background-color: #46649b;
+}
+
+/* Period */
+.DateRangePickerInput__disabled {
+  background: #fff;
+}
+
+.DateInput_input__disabled {
+  background: #fff;
+  font-style: normal;
+}

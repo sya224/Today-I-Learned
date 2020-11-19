@@ -1,0 +1,17 @@
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/til?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+#    username: ssafy
+#    password: ssafy
+#    type: org.apache.commons.dbcp.BasicDataSource
+##  mvc:
+##    view:
+##      prefix: /
+##      suffix: .jsp
+##server:
+##  servlet:
+##    context-path: /spring
+#
+#mybatis:
+#  config-location: classpath:/spring/SqlMapConfig.xml

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.dao.FollowDao">
+
+	<insert id="insertFollow" parameterType="follow" useGeneratedKeys="true" keyProperty="follow_id">
+		insert into follow(mem_from, mem_to)
+		values(#{mem_from}, #{mem_to})
+	</insert>
+	
+	<select id="countFollow" parameterType="follow" resultType="int">
+		select count(*)
+		from follow
+		where mem_from = #{mem_from}
+		and mem_to = #{mem_to}
+	</select>
+
+	<delete id="deleteFollow"  parameterType="follow">
+		delete
+		from follow
+		where mem_from = #{mem_from}
+		and mem_to = #{mem_to}
+	</delete>
+	
+	<select id="searchWhoIFollow" parameterType="string" resultType="string">
+		select mem_to
+		from follow
+		where mem_from = #{mem_from}
+	</select>
+	
+	<select id="searchWhoFollowMe" parameterType="string" resultType="string">
+		select mem_from
+		from follow
+		where mem_to = #{mem_to}
+	</select>
+
+</mapper>

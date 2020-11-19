@@ -1,0 +1,11 @@
+.compact-picker > div > span > div {background-clip: content-box !important; padding: 1px; border: 1px solid gray; }
+.compact-picker > div > span > div:hover{border: 1px solid blue;}
+.compact-picker > div > span > div:focus{box-shadow: none !important;}
+.compact-picker > div > span:nth-child(3) > div{box-shadow: none !important;}
+.compact-picker > div > span:nth-child(3) > div:focus{box-shadow: none !important;}
+.compact-picker > .flexbox-fix{display: none !important;}
+.compact-picker {box-shadow: none !important; width: 290px !important;}
+.container > div:nth-child(2) > div{box-shadow: none !important;}
+.container > div > div {background-clip: content-box !important;}
+.selectColor{ padding: 5px; background: #fff; display: inline-block; cursor: pointer; border: 1px solid white;}
+.selectColor:hover{border: 1px solid blue;}

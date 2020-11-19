@@ -1,0 +1,5 @@
+.user_image{width: 120px; margin: 0 auto 10px;}
+.user_image > img{border-radius: 50%;}
+.user_info{text-align: center;}
+.user_nick{color: #2e2e2e; margin-right: 4px;}
+.user_id{color: gray;}

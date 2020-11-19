@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.dao.AlarmDao">
+
+	<insert id="insertAlarm" parameterType="alarm" useGeneratedKeys="true" keyProperty="alarm_id">
+		insert into alarm(mem_id, alarm_text, alarm_date, alarm_url)
+		values(#{mem_id}, #{alarm_text}, timestamp(now()), #{alarm_url})		
+	</insert>	
+	<!-- # {alarm_date,javaType=java.sql.Timestamp,jdbcType=TIMESTAMP} -->
+
+	<delete id="deleteAlarm" parameterType="int">
+		delete
+		from alarm
+		where alarm_id = #{alarm_id}
+	</delete>
+
+	<delete id="deleteAll" parameterType="string">
+		delete
+		from alarm
+		where mem_id = #{mem_id}
+	</delete>
+
+	<select id="searchAll" parameterType="string" resultType="alarm">
+		select *
+		from alarm
+		where mem_id = #{mem_id}
+	</select>
+	
+	
+
+</mapper>

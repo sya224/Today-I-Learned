@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.dao.TagDao">
+
+	<insert id="insertTag" parameterType="tag" useGeneratedKeys="true" keyProperty="tag_id">
+		insert into tag(tag_name)
+		values(#{tag_name})
+	</insert>
+
+	<select id="searchAll" resultType="tag">
+		select * from tag
+	</select>
+
+	<select id="search" parameterType="int" resultType="tag">
+		select tag_name
+		from tag
+		where tag_id = #{tag_id}
+	</select>
+
+	<update id="updateTag" parameterType="tag">
+		update tag
+		set
+		tag_name = #{tag_name}
+		where tag_id = #{tag_id}
+	</update>
+
+	<delete id="deleteTag" parameterType="int">
+		delete
+		from tag
+		where tag_id = #{tag_id}
+	</delete>
+
+	<select id="publictagcloud" parameterType="string" resultType="tag">
+		select e.tag_name, count(e.tag_id) as tag_id
+		from cardlist_tag c, tag e,
+				(select cardlist_id, b.board_date
+				from cardlist c,
+						(select board_id, board_date
+						from board
+						where mem_id = #{mem_id}
+						and board_date between #{from} and #{to}) b
+				where c.board_id = b.board_id
+				and cardlist_secret = false ) d
+		where c.cardlist_id = d.cardlist_id
+		and c.tag_id = e.tag_id
+		group by e.tag_id;
+	</select>
+
+	<select id="privatetagcloud" parameterType="string" resultType="tag">
+		select e.tag_name, count(e.tag_id) as tag_id
+		from cardlist_tag c, tag e,
+				(select cardlist_id, b.board_date
+				from cardlist c,
+						(select board_id, board_date
+						from board
+						where mem_id = #{mem_id}
+						and board_date between #{from} and #{to}) b
+				where c.board_id = b.board_id ) d
+		where c.cardlist_id = d.cardlist_id
+		and c.tag_id = e.tag_id
+		group by e.tag_id;
+	</select>
+	
+	<select id="searchPrivateTag" parameterType="string" resultType="tag">
+		select e.tag_id, e.tag_name 
+		from cardlist_tag c, tag e,
+				(select cardlist_id
+				from cardlist c,
+						(select board_id
+						from board
+						where mem_id = #{mem_id}) b
+				where c.board_id = b.board_id ) d
+		where c.cardlist_id = d.cardlist_id
+		and c.tag_id = e.tag_id
+		and e.tag_name like concat('%',#{keyword},'%')
+		group by e.tag_id;
+	</select>
+
+	<select id="searchPublicTag" parameterType="string" resultType="tag">
+		select e.tag_id, e.tag_name 
+		from cardlist_tag c, tag e,
+				(select cardlist_id
+				from cardlist c,
+						(select board_id
+						from board
+						where mem_id = #{mem_id}) b
+				where c.board_id = b.board_id 
+				and c.cardlist_secret = false ) d
+		where c.cardlist_id = d.cardlist_id
+		and c.tag_id = e.tag_id
+		and e.tag_name like concat('%',#{keyword},'%')
+		group by e.tag_id;
+	</select>
+
+	<select id="searchGlobalTag" parameterType="string" resultType="tag">
+		select e.tag_id, e.tag_name 
+		from cardlist_tag c, tag e,
+				(select cardlist_id
+				from cardlist c						
+				where c.cardlist_secret = false ) d
+		where c.cardlist_id = d.cardlist_id
+		and c.tag_id = e.tag_id
+		and e.tag_name like concat('%',#{keyword},'%')
+		group by e.tag_id;
+	</select>
+	
+	<select id="globalTag" resultType="tag">
+		select e.tag_id, e.tag_name 
+		from cardlist_tag c, tag e,
+				(select cardlist_id
+				from cardlist c						
+				where c.cardlist_secret = false ) d
+		where c.cardlist_id = d.cardlist_id
+		and c.tag_id = e.tag_id		
+		group by e.tag_id;
+	</select>
+
+</mapper>

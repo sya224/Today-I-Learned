@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.ssafy.project.dto.Alarm" alias="alarm" />
+		<typeAlias type="com.ssafy.project.dto.Board" alias="board" />
+		<typeAlias type="com.ssafy.project.dto.Card" alias="card" />
+		<typeAlias type="com.ssafy.project.dto.Cardlist" alias="cardlist" />
+		<typeAlias type="com.ssafy.project.dto.CardlistSearch" alias="cardlistsearch" />
+		<typeAlias type="com.ssafy.project.dto.Cardlist_Tag" alias="cardlist_tag" />
+		<typeAlias type="com.ssafy.project.dto.Tag" alias="tag" />
+		<typeAlias type="com.ssafy.project.dto.Comment" alias="comment" />
+		<typeAlias type="com.ssafy.project.dto.Member" alias="member" />
+		<typeAlias type="com.ssafy.project.dto.SNS" alias="sns" />
+		<typeAlias type="com.ssafy.project.dto.Follow" alias="follow" />
+		<typeAlias type="com.ssafy.project.dto.Heart" alias="heart" />
+	</typeAliases>
+	<mappers>
+		<mapper resource="spring/Alarm_query.xml" />
+		<mapper resource="spring/Member_query.xml" />
+		<mapper resource="spring/Cardlist_query.xml" />
+		<mapper resource="spring/Card_query.xml" />
+		<mapper resource="spring/Board_query.xml" />
+		<mapper resource="spring/Tag_query.xml" />
+		<mapper resource="spring/Cardlist_Tag_query.xml" />
+		<mapper resource="spring/Comment_query.xml" />
+		<mapper resource="spring/Follow_query.xml" />
+		<mapper resource="spring/Heart_query.xml" />
+	</mappers>
+</configuration>

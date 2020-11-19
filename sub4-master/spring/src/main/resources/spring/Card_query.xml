@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.dao.CardDao">
+
+	<insert id="insertCard" parameterType="card" useGeneratedKeys="true" keyProperty="card_id">
+		insert into card(cardlist_id,
+		card_name, card_contents,
+		card_secret)
+		values(#{cardlist_id},
+		#{card_name}, #{card_contents}, #{card_secret})
+	</insert>
+
+	<select id="getFileName" parameterType="int" resultType="string">
+		select card_upload
+		from card
+		where card_id = #{card_id}
+	</select>
+
+
+	<select id="search" parameterType="int" resultType="card">
+		select *
+		from
+		card
+		where card_id = #{card_id}
+	</select>
+
+	<update id="updateCard" parameterType="card">
+		update card
+		set
+		card_name = #{card_name},
+		card_contents = #{card_contents},
+		card_secret = #{card_secret},
+		cardlist_id = #{cardlist_id}
+		where
+		card_id = #{card_id}
+	</update>
+
+	<delete id="deleteCard" parameterType="int">
+		delete
+		from card
+		where
+		card_id = #{card_id}
+	</delete>
+
+	<select id="getMaxCardId" resultType="int">
+		select max(card_id)
+		from
+		card
+	</select>
+
+	<select id="countPublicDailyCard" parameterType="string" resultType="board">
+	
+		select count(e.card_id) as board_id, d.board_date
+		from card e,
+			# 보드에 포함된 카드리스트를 찾고 
+			(select	cardlist_id, b.board_date
+			from cardlist c,
+				# 먼저 날짜에 해당하는 보드를 찾고
+				(select board_id, board_date
+				from board
+				where mem_id = #{mem_id}
+				and board_date between #{from} and #{to}) b
+				
+			where c.board_id = b.board_id
+			and c.cardlist_secret = false ) d
+			
+		where e.cardlist_id = d.cardlist_id	
+		and card_secret = false
+		group by d.board_date
+	</select>
+
+	<select id="countAllDailyCard" parameterType="string" resultType="board">
+		select count(e.card_id) as board_id, d.board_date
+		from card e,
+		
+			(select	cardlist_id, b.board_date
+			from cardlist c,
+			
+				(select board_id, board_date
+				from board
+				where mem_id = #{mem_id}
+				and board_date between #{from} and #{to}) b
+				
+			where c.board_id = b.board_id) d
+			
+		where e.cardlist_id = d.cardlist_id
+		group by d.board_date
+	</select>
+
+	<select id="searchPrivateCard" parameterType="string" resultType="card">
+	<![CDATA[ select c.*
+		from board b, cardlist cl, card c
+		where
+		(card_name	like concat('%',#{keyword},'%')
+		or card_contents like concat('%',#{keyword},'%'))
+		and b.board_id = cl.board_id
+		and	b.board_date < curdate()
+		and b.mem_id = #{mem_id}
+		and cl.cardlist_id = c.cardlist_id  ]]>		
+	</select>
+
+	<select id="searchPublicCard" parameterType="string" resultType="card">
+	<![CDATA[  select c.*
+		from board b, cardlist cl, card c
+		where (card_name like concat('%',#{keyword},'%') or card_contents like concat('%',#{keyword},'%'))
+		and c.card_secret = false
+		and b.board_id = cl.board_id
+		and b.board_date < curdate()
+		and b.mem_id = #{mem_id}
+		and cl.cardlist_secret = false
+		and cl.cardlist_id = c.cardlist_id ]]>		
+	</select>
+
+	<select id="searchGlobalCard" parameterType="string" resultType="card">
+	<![CDATA[ select c.*
+		from board b, cardlist cl, card c
+		where (card_name like concat('%',#{keyword},'%') or card_contents like concat('%',#{keyword},'%'))
+		and c.card_secret = false
+		and b.board_id = cl.board_id
+		and b.board_date < curdate()
+		and cl.cardlist_secret = false
+		and cl.cardlist_id = c.cardlist_id ]]>		
+	</select>
+	
+	<update id="movecard" parameterType="int"> 
+		update card
+		set
+		cardlist_id = #{cardlist_id}
+		where card_id = #{card_id}
+	</update>
+	
+	
+	
+	
+	<update id="uploadFile">
+		update card
+		set 
+		card_upload = #{card_upload}
+		where card_id = #{card_id}
+	</update>
+	
+	<update id="deleteFile">
+		update card
+		set 
+		card_upload = null
+		where card_id = #{card_id}
+	</update>
+	
+	
+</mapper>
+
+
+
+
+
+
+
+

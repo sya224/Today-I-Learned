@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.dao.HeartDao">
+
+	<insert id="insertHeart" parameterType="heart" useGeneratedKeys="true" keyProperty="heart_id">
+		insert into heart(mem_id, cardlist_id)
+		values(#{mem_id}, #{cardlist_id})
+	</insert>
+
+	<select id="countHeart" parameterType="heart" resultType="int">
+		select count(*)
+		from heart
+		where mem_id = #{mem_id}
+		and cardlist_id = #{cardlist_id}
+	</select>
+
+	<delete id="deleteHeart" parameterType="heart">
+		delete
+		from heart
+		where mem_id = #{mem_id}
+		and cardlist_id = #{cardlist_id}
+	</delete>
+	
+	<select id="cidWhatILike" parameterType="string" resultType="int">
+		select cardlist_id
+		from heart
+		where mem_id = #{mem_id}
+	</select>
+
+	<select id="searchWhatILike" parameterType="hashMap" resultType="cardlistsearch">
+		select b.mem_id, cl.board_id, b.board_date, cl.cardlist_id, cl.cardlist_name, tag.tag_name
+		from heart h, cardlist cl, board b,
+				(select cl.cardlist_id, ifnull(tag.tag_name, "") as tag_name
+				from cardlist cl 
+				left outer join (select ct.cardlist_id, group_concat(t.tag_name) as tag_name
+								from cardlist_tag ct, tag t
+								where ct.tag_id = t.tag_id
+								group by ct.cardlist_id) tag 
+				on cl.cardlist_id = tag.cardlist_id) tag
+		where h.mem_id = #{mem_id}
+		and h.cardlist_id = cl.cardlist_id
+		and cl.board_id = b.board_id
+		and tag.cardlist_id = cl.cardlist_id
+		order by b.board_date desc
+   		limit #{start}, #{limit}
+	</select>
+
+	<select id="searchWhoLikeIt" parameterType="int" resultType="string">
+		select mem_id
+		from heart
+		where cardlist_id = #{cardlist_id}
+	</select>
+
+</mapper>

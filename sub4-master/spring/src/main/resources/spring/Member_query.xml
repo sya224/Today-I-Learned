@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.dao.MemberDao">
+
+	<insert id="insertMember" parameterType="member">
+		insert into mem_info
+		(mem_id, mem_pw, mem_email,
+		 mem_nick, mem_color, mem_font, mem_auth,
+		 mem_post_def_secret, mem_reg_date)
+		values
+		(#{mem_id},#{mem_pw},#{mem_email},
+		 #{mem_nick}, '#1EC800', 1, 1, false, now())
+	</insert>
+	
+	<select id="searchAll" resultType="member">
+		select mem_id, mem_email, mem_nick, mem_auth, mem_reg_date, mem_thumb, mem_color, mem_font, mem_post_def_secret, mem_self_intro
+		from mem_info
+	</select>
+	
+	<select id="searchByIdLike" parameterType="string" resultType="member">
+		select mem_id, mem_email, mem_nick, mem_auth, mem_reg_date, mem_thumb, mem_color, mem_font, mem_post_def_secret, mem_self_intro
+		from mem_info
+		where mem_id LIKE concat('%',#{mem_id},'%')
+	</select>
+	
+	<select id="searchByNickLike" parameterType="string" resultType="member">
+		select mem_id, mem_email, mem_nick, mem_auth, mem_reg_date, mem_thumb, mem_color, mem_font, mem_post_def_secret, mem_self_intro
+		from mem_info
+		where mem_nick LIKE concat('%',#{mem_nick},'%')
+	</select>
+	
+	<select id="search" parameterType="string" resultType="member">
+		select mem_id, mem_email, mem_nick, mem_auth, mem_reg_date, mem_thumb, mem_color, mem_font, mem_post_def_secret, mem_self_intro
+		from mem_info
+		where mem_id = #{mem_id}
+	</select>
+	
+	<update id="updateMember" parameterType="member">
+		update mem_info
+		set
+		mem_nick = #{mem_nick},
+		mem_thumb = #{mem_thumb},
+		mem_color = #{mem_color},
+		mem_font = #{mem_font},
+		mem_self_intro = #{mem_self_intro},
+		mem_post_def_secret = #{mem_post_def_secret}
+		where mem_id = #{mem_id}
+	</update>
+	
+	<update id="updateEmail" parameterType="string" >
+		update mem_info
+		set
+		mem_email = #{mem_email}
+		where mem_id = #{mem_id}
+	</update>
+	
+	<update id="deleteMember" parameterType="string">
+		update mem_info
+		set
+		mem_auth = 3
+		where mem_id = #{mem_id}
+	</update>
+	
+	<update id="hidecardlists" parameterType="string">
+		update cardlist
+		set 
+		cardlist_secret = true
+		where cardlist.board_id in (select board_id from board where mem_id = #{mem_id});
+	</update>
+	
+	<select id="findpw" parameterType="string" resultType="string">
+		select mem_pw
+		from mem_info
+		where mem_id = #{mem_id}
+	</select>
+	
+	<update id="patchpassword" parameterType="string">
+		update mem_info
+		set
+		mem_pw = #{new_pw}
+		where mem_id = #{mem_id}
+	</update>
+	
+	<update id="patchcolor" parameterType="string">
+		update mem_info
+		set
+		mem_color = #{mem_color}
+		where mem_id = #{mem_id}
+	</update>
+	
+	<select id="getAuth" parameterType="string" resultType="int">
+		select mem_auth
+		from mem_info
+		where mem_id = #{mem_id}
+	</select>
+
+	<select id="getpostdef" parameterType="string" resultType="int">
+		select mem_post_def_secret
+		from mem_info
+		where mem_id = #{mem_id}
+	</select>
+
+	<update id="patchAuth" parameterType="string">
+		update mem_info
+		set
+		mem_auth = case when mem_auth = 1 then 2 else 1 end
+		where mem_id = #{mem_id}
+	</update>
+	
+	<update id="patchpostdef" parameterType="string">
+		update mem_info
+		set
+		mem_post_def_secret = case when mem_post_def_secret = 0 then 1 else 0 end
+		where mem_id = #{mem_id}
+	</update>
+	
+	<select id="countEmail" parameterType="string" resultType="int">
+		select count(*)
+		from mem_info
+		where mem_email = #{mem_email}
+	</select>
+	
+	<insert id="insertSNS" parameterType="sns" useGeneratedKeys="true" keyProperty="id">
+		insert into sns(mem_id, sns_nid, mem_email, provider)
+		values(#{mem_id}, #{sns_nid}, #{mem_email}, #{provider})
+	</insert>
+	
+	<select id="countSNSByEmail" parameterType="string" resultType="int">
+		select count(*)
+		from sns
+		where mem_email = #{mem_email}
+	</select>
+	
+	<select id="searchSNSIdByEmail" parameterType="string" resultType="string">
+		select mem_id
+		from sns
+		where mem_email = #{mem_email}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="countId" parameterType="string" resultType="int">
+		select count(*)
+		from mem_info
+		where mem_id = #{mem_id}
+	</select>	
+	
+	<insert id="insertEmailAuth" parameterType = "string">
+		insert into confirm_email(mem_id, email_auth, email_key)
+		values(#{mem_id}, false, #{authCode})		
+	</insert>
+	
+	<delete id="deletePrevAuth" parameterType = "string">
+		delete 
+		from confirm_email
+		where mem_id = #{mem_id}
+	</delete>
+	
+	<update id="postAuth" parameterType = "string">
+		update confirm_email
+		set
+		email_auth = true
+		where (select mem_id from mem_info where mem_email = #{mem_email}) = #{mem_id}
+		and email_key = #{authCode};
+	</update>
+	
+	<select id="searchIdByEmail" parameterType="string" resultType="string">
+		select mem_id
+		from mem_info
+		where mem_email = #{mem_email}
+	</select>
+	
+	<update id="setPw" parameterType="string">
+		update mem_info
+		set
+		mem_pw = #{authCode}
+		where mem_id = #{mem_id}
+	</update>
+
+</mapper>

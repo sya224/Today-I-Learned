@@ -1,0 +1,25 @@
+.none{
+  display: none;
+}
+
+.error{
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 4px 0 -10px;
+  color: #ff1616;
+  border: 0px;
+  width : 100%;
+  background-color: white;
+}
+
+.error_{
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  margin: -4px 0 10px;
+  color: #ff1616;
+  border: 0px;
+  width : 100%;
+  background-color: white;
+}
